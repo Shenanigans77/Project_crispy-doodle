@@ -20,7 +20,6 @@ def main():
 
     return 0
 
-
 def compare(filehashed, checksum):
     if filehashed == checksum:
         print("{}".format("Valid"))
