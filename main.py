@@ -2,6 +2,7 @@ import string
 import itertools
 import hashlib
 import sys
+import fileinput
 import os
 
 def main():
@@ -11,20 +12,22 @@ def main():
         exit(1)
 
     # Store  file and checksum
-    infile = sys.argv[1]
     checksum = sys.argv[2]
-    # Calculate specified hash values
-    # For completeness (not secure)
-    contenthash = hashlib.sha256()
-    open(infile, "r+b")
 
+    # Instantiate hash function
+    contenthash = hashlib.sha256().hexdigest()
 
-    # Compare 2 checksums to see if they are identical
-    file = 'abc'
-    check = 'abc'
+    # Open file to verify
 
+    with open(sys.argv[1], "r+b") as Sub:
+        Sub.seek(0)
+    contenthash.update(Sub)
 
-    return 0
+    # Compare checksum and hash from file
+    if (compare(contenthash, checksum) != True):
+        return 0
+    else:
+        return 1
 
 
 def compare(filehashed, checksum):
