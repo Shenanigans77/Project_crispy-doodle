@@ -1,7 +1,7 @@
 import hashlib
 import sys
-import fileinput
 import os
+import io
 
 
 def main():
@@ -21,8 +21,10 @@ def main():
 
     return 0
 
-
+# compare takes two arguments, both strings
+# one should be the hash of a file, the other should be a checksum
 def compare(filehashed, checksum):
+
     if filehashed == checksum:
         print("{}".format("Valid"))
         return True
@@ -31,13 +33,20 @@ def compare(filehashed, checksum):
         return False
 
 
+# Takes a file as an argument. Returns the hex digest of the file
 def hcalc(intake):
     # Instantiate hash function
     filehash = hashlib.sha256()
 
     # Calculate specified hash values
     with open(intake, "r+b") as fintake:
-        filehash.update(str(fintake).encode("utf-8"))
+
+        # reads fintake as a stream of bytes
+        filebytes: object = io.BufferedRandom(fintake).read()
+
+        # updates contents to hash
+        filehash.update(filebytes)
+
         digested = filehash.hexdigest()
 
     return digested
